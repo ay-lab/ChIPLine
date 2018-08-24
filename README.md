@@ -22,7 +22,7 @@ ChIPLine requires the following packages / libraries to be installed in the syst
 
 1) Bowtie2 (we have used version 2.3.3.1) http://bowtie-bio.sourceforge.net/bowtie2/index.shtml
 2) samtools (we have used version 1.6) http://samtools.sourceforge.net/
-3) PICARD tools https://broadinstitute.github.io/picard/
+3) PICARD tools (we have used 2.7.1 version) https://broadinstitute.github.io/picard/
 4) Package phantompeakqualtools (Developed by Kundaje et al., for analyzing ChIP-seq quality) https://code.google.com/archive/p/phantompeakqualtools/ 
 5) Utilities "bedGraphToBigWig", "bedSort", "bigBedToBed", "hubCheck" and "fetchChromSizes" downloaded from UCSC repository. Executables corresponding to the linux system, for example, is provided in this link: http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/
 6) deepTools (we have used version 2.0) https://deeptools.readthedocs.io/en/develop/
@@ -134,7 +134,49 @@ Optional parameters:
 		Set the maximum fragment length to be used for Bowtie2 alignment [Default = 2000]
 
 
+Entries in the configuration file (first parameter)
+---------------------------------------------------
 
+The configuration file follows the format
+	parameter=value
+
+And is to be filled with the following entries:
+
+sppexec=
+	executable of SPP R code (from the package phantompeakqualtools)
+	after installation. 
+	For example, /home/sourya/packages/phantompeakqualtools/run_spp.R.
+	
+picardexec=
+	Path of Picard tool executable
+	Example: /home/sourya/packages/picard-tools/picard-tools-2.7.1/picard.jar
+	
+HOMERPath=
+	Path of HOMER (after installation)
+	Example: /home/sourya/packages/HOMER/bin/
+	
+DeepToolsDir=
+	Path of deepTools executable
+	Example: /home/sourya/packages/deepTools/deepTools2.0/bin/
+
+RPackageExec=
+	Installed R package directory.
+	Example: /home/sourya/R-3.4.3/bin/Rscript
+	If left as blank, default Rscript installed in the system will be invoked.
+
+NarrowPeakASFile=
+	file (SQL) required to convert the narrowPeak file to the bigBed format
+	Download the file from this link (and save):
+	https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/encode/narrowPeak.as
+	Specify the location of this downloaded file:
+	Example: /home/sourya/genomes/chrsize/narrowPeak.as
+	
+BigNarrowPeakASFile=
+	file (SQL) required to convert the bignarrowPeak file to the bigBed format
+	Download the file from this link (and save):
+	https://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.as
+	Specify the location of this downloaded file:
+	Example: /home/sourya/genomes/chrsize/bigNarrowPeak.as
 
 
 
