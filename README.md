@@ -1,4 +1,9 @@
-# ChIPLine - ChIP-seq analysis pipeline
+# ChIPLine 
+# a pipeline for ChIP-seq analysis
+# Devloped by : Sourya Bhattacharyya
+# Supervisors: Dr. Ferhat Ay and Dr. Pandurangan Vijayanand
+# La Jolla Institute for Allergy and Immunology
+# La Jolla, San Diego, CA 92037, USA
 ---------------------------------------
 
 
