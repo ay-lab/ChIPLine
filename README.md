@@ -236,9 +236,44 @@ Describing output of ChIP-seq analysis
 	F2: Out_BigWig
 		f1: ${PREFIX}.bw 
 			bigwig file for track visualization.
+	
 	F3: Out_BigWig_NormCov:
 		f1: ${PREFIX}_NormCov.bw
 			bigwig file for track visualization (after normalizing the coverage).
+			
+	F4: MACS2_Default_*
+		Contains peaks employing MACS2 with default parameters.
+			f1: *.narrowPeak: narowpeak formatted output with P-value threshold of 0.01
+			f2: *.narrowPeak_Q0.05filt: peaks with Q-value threshold of 0.05
+			f3: *.narrowPeak_Q0.01filt: peaks with Q-value threshold of 0.01
+			f4: *.broadPeak: broadpeak formatted output with P-value threshold of 0.01
+			f5: *.broadPeak_Q0.05filt: peaks with Q-value threshold of 0.05
+			f6: *.broadPeak_Q0.01filt: peaks with Q-value threshold of 0.01
+			f7: out_FRiP.txt: FRIP statistics for the narrow and broad peaks.
+			f8: Peak_Statistics.txt: number of peaks
+			F9: Peak_Annotate_Q*:
+				For Q-value thresholds of either 0.01 or 0.05, contains the 
+				HOMER based annotations.
+			
+			In addition, files *.bb denote corresponding big-bd formatted peaks,
+			useful for USCSC track visualization.
+			
+	F5: MACS2_Ext_*
+		Contains peaks employing MACS2 with the parameters:
+			--nomodel --nolambda --shift 0 --extsize 200
+		File structure is similar as above.
+	
+	F6: Peak_Overlap_Statistics
+		Overlapping peaks corresponding to the settings F4 and F5
+		
+	f7: chipSampleMaster.tagAlign.pdf
+		Quality metric display using cross correlation analysis.
+		
+	f8: out_NRF_MAPQ30.txt
+		Metric NRF
+		
+	f9: Read_Count_Stat.txt
+		Read count statistics.
 		
 
 
