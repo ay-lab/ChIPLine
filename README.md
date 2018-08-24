@@ -214,7 +214,32 @@ Describing output of ChIP-seq analysis
 -----------------------------------------
 	
 	Within the folder "OutDir" (base directory containing all the outputs of 
-	current ChIP-seq analysis, following files and folders exist):
+	current ChIP-seq analysis, following files (f) and folders (F) exist):
+	
+	F1: Alignment_MAPQ30
+	
+		f1: UniqMappedRead.bam
+			Initial alignment after unique mapping.
+		f2: Bowtie2_del_Random.bam
+			Alignment after deleting random reads.
+		f3: Bowtie2_del_Mitch.bam: 
+			After deleting mitochondrial reads.	
+		f4: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.bam
+			Sorted, and MAPQ thresholded alignment.
+		f5: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.bam.bai
+			Corresponding index.
+		f6: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.rmdup.bam
+			De-duplicated alignment (used for subsequent operations)
+		f7: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.picard_metrics.txt
+			Corresponding PICARD metrics log file.
+			
+	F2: Out_BigWig
+		f1: ${PREFIX}.bw 
+			bigwig file for track visualization.
+	F3: Out_BigWig_NormCov:
+		f1: ${PREFIX}_NormCov.bw
+			bigwig file for track visualization (after normalizing the coverage).
+		
 
 
 
