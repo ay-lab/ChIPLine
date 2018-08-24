@@ -142,42 +142,79 @@ The configuration file follows the format
 
 And is to be filled with the following entries:
 
-sppexec=
-	executable of SPP R code (from the package phantompeakqualtools)
-	after installation. 
-	For example, /home/sourya/packages/phantompeakqualtools/run_spp.R.
+	sppexec=
+		executable of SPP R code (from the package phantompeakqualtools)
+		after installation. 
+		For example, /home/sourya/packages/phantompeakqualtools/run_spp.R.
 	
-picardexec=
-	Path of Picard tool executable
-	Example: /home/sourya/packages/picard-tools/picard-tools-2.7.1/picard.jar
+	picardexec=
+		Path of Picard tool executable
+		Example: /home/sourya/packages/picard-tools/picard-tools-2.7.1/picard.jar
 	
-HOMERPath=
-	Path of HOMER (after installation)
-	Example: /home/sourya/packages/HOMER/bin/
+	HOMERPath=
+		Path of HOMER (after installation)
+		Example: /home/sourya/packages/HOMER/bin/
 	
-DeepToolsDir=
-	Path of deepTools executable
-	Example: /home/sourya/packages/deepTools/deepTools2.0/bin/
+	DeepToolsDir=
+		Path of deepTools executable
+		Example: /home/sourya/packages/deepTools/deepTools2.0/bin/
 
-RPackageExec=
-	Installed R package directory.
-	Example: /home/sourya/R-3.4.3/bin/Rscript
-	If left as blank, default Rscript installed in the system will be invoked.
+	RPackageExec=
+		Installed R package directory.
+		Example: /home/sourya/R-3.4.3/bin/Rscript
+		If left as blank, default Rscript installed in the system will be invoked.
 
-NarrowPeakASFile=
-	file (SQL) required to convert the narrowPeak file to the bigBed format
-	Download the file from this link (and save):
-	https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/encode/narrowPeak.as
-	Specify the location of this downloaded file:
-	Example: /home/sourya/genomes/chrsize/narrowPeak.as
+	NarrowPeakASFile=
+		file (SQL) required to convert the narrowPeak file to the bigBed format
+		Download the file from this link (and save):
+		https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/encode/narrowPeak.as
+		Specify the location of this downloaded file:
+		Example: /home/sourya/genomes/chrsize/narrowPeak.as
+
+	BigNarrowPeakASFile=
+		file (SQL) required to convert the bignarrowPeak file to the bigBed format
+		Download the file from this link (and save):
+		https://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.as
+		Specify the location of this downloaded file:
+		Example: /home/sourya/genomes/chrsize/bigNarrowPeak.as
+		
+	BroadPeakASFile=
+		file (SQL) required to convert the broadPeak file to the bigBed format
+		Download the file from this link (and save):
+		https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/encode/broadPeak.as
+		Specify the location of this downloaded file:
+		Example: /home/sourya/genomes/chrsize/broadPeak.as
+		
+	RefChrSizeFile=
+		files containing chromosome size information
+		two column file storing the size of individual chromosomes
+		Downloaded from the link (depends on the reference Chromosome employed):
+		For example, the hg38.chrom.sizes file for the hg38 database is located at 
+		http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes.
+		Alternatively, Use the "fetchChromSizes" script from the UCSC repository 
+		to get the appropriate chromosome size file.
+		Specify the location of this downloaded file:
+		Example: /home/sourya/genomes/chrsize/hg38.chrom.sizes
+		
+	RefChrFastaFile=
+		Fasta file of the reference Chromosome.
+		Can be downloaded from the link:
+		http://hgdownload.cse.ucsc.edu/downloads.html
+		Example: /home/sourya/genomes/Complete_Genome/hg38/hg38.fa
+		
+	RefChrAnnotFile=
+		file containing reference UCSC annotation (.gtf format) 
+		corresponding to the reference Chromosome.
+		Can be downloaded from the link:
+		http://hgdownload.cse.ucsc.edu/downloads.html
+		Example: /home/sourya/genomes/Annotation/hg38/UCSC/hg38_UCSC_Annotation.gtf
+		
+
+
+
+
+		
 	
-BigNarrowPeakASFile=
-	file (SQL) required to convert the bignarrowPeak file to the bigBed format
-	Download the file from this link (and save):
-	https://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.as
-	Specify the location of this downloaded file:
-	Example: /home/sourya/genomes/chrsize/bigNarrowPeak.as
-
 
 
 
