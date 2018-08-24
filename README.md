@@ -210,6 +210,42 @@ And is to be filled with the following entries:
 		Example: /home/sourya/genomes/Annotation/hg38/UCSC/hg38_UCSC_Annotation.gtf
 		
 
+Summarizing a list of ChIP-seq analysis
+---------------------------------------
+
+Suppose, a directory "/home/sourya/Results" contain within it, the following folders:
+	1, 2, 3, 4, ...
+	Each corresponds to the output results for individual ChIP-seq samples.
+	
+To get a summarized list of performance metrics for these samples, use the script "ResSummary2.r".
+
+Rscript ResSummary2.r [positional_arguments]:
+
+	1) OutBaseDir: 
+		Directory under which results of all the different samples are stored
+
+	2) BAMRead: 
+		Boolean variable, indicating if the BAM files were used for 
+		analysis (1) or fastq (0). Default 0
+
+	3) Tagmentation: 
+		Binary variable. If 1, denotes that the data samples 
+		have been under ChIPMentation method. Default 0.
+			
+	4) OldMethod:  
+		Use 0 for this parameter.
+	
+	5) ControlPeak: 
+		Variable with value of either 0, 1 or 2. 
+		If 1, control samples has been used for peak calling. 
+		If 0, no control sample is used. 
+		If 2, peaks using control and not using control both exist. 
+		Default 0.
+
+Sample execution command:
+	Rscript ResSummary2.r /home/sourya/ChIPResults/ 0 1 0 2
+
+
 
 Contact
 ----------
