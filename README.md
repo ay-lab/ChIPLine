@@ -211,10 +211,16 @@ And is to be filled with the following entries:
 		
 
 
+Contact
+----------
 
+For any queries, please e-mail:
 
-		
-	
+Sourya Bhattacharyya (sourya@lji.org)
+
+Ferhat Ay (ferhatay@lji.org)
+
+Pandurangan Vijayanand (vijay@lji.org)
 
 
 
