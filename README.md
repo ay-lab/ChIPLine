@@ -209,6 +209,14 @@ And is to be filled with the following entries:
 		http://hgdownload.cse.ucsc.edu/downloads.html
 		Example: /home/sourya/genomes/Annotation/hg38/UCSC/hg38_UCSC_Annotation.gtf
 		
+		
+Describing output of ChIP-seq analysis
+-----------------------------------------
+	
+	Within the folder "OutDir" (base directory containing all the outputs of 
+	current ChIP-seq analysis, following files and folders exist):
+
+
 
 Summarizing a list of ChIP-seq analysis
 ---------------------------------------
@@ -243,6 +251,7 @@ Rscript ResSummary2.r [positional_arguments]:
 		Default 0.
 
 Sample execution command:
+
 	Rscript ResSummary2.r /home/sourya/ChIPResults/ 0 1 0 2
 
 
@@ -257,14 +266,5 @@ Sourya Bhattacharyya (sourya@lji.org)
 Ferhat Ay (ferhatay@lji.org)
 
 Pandurangan Vijayanand (vijay@lji.org)
-
-
-
-
-
-
-
-
-
 
 
