@@ -1,6 +1,4 @@
-# ChIPLine 
-# a pipeline for ChIP-seq analysis
-# ---------------------------------------
+# ChIPLine - a pipeline for ChIP-seq analysis
 
 Developers
 --------------
