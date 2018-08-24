@@ -14,6 +14,14 @@ La Jolla, San Diego, CA 92037, USA
 
 ChIPLine is a pipeline to analysis ChIP-seq data, starting from input Fastq/BAM files and generating alignment summary, various quality statistics, peak calling, and BigWig formatted tracks ready for visualization in UCSC genome browser.
 
+Theory
+---------
+
+User can check the following papers or links for understanding ChIP-seq QCs:
+	1) https://github.com/crazyhottommy/ChIP-seq-analysis  (very useful)
+	2) https://www.encodeproject.org/data-standards/terms/#library
+	3) https://www.biostars.org/p/205576/
+	 
 
 Required packages
 -----------------
