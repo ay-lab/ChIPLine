@@ -18,8 +18,11 @@ Theory
 ---------
 
 User can check the following papers or links for understanding ChIP-seq QCs:
+	
 	1) https://github.com/crazyhottommy/ChIP-seq-analysis  (very useful)
+	
 	2) https://www.encodeproject.org/data-standards/terms/#library
+	
 	3) https://www.biostars.org/p/205576/
 	 
 
