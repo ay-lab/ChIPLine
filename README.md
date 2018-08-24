@@ -48,7 +48,7 @@ Options:
                  Current package includes a sample configuration file named "configfile". 
                  Details of the entries in this file are mentioned later.
                   
-  -f  FASTQ1          
+	-f  FASTQ1          
                 Read 1 (or forward strand) of paired-end sequencing data  [.fq|.gz|.bz2]. 
   						  Or, even an aligned genome (.bam file) can be provided.
             
@@ -60,35 +60,40 @@ Options:
                 Prefix string of output files. For example, -n "TEST" means that the 
                 output filenames start with the string "TEST".
 
-  -g  BOWTIE2_GENOME   
-                Bowtie2 indexed reference genome. Basically, the folder containing the bwt2 indices are to be provided.
+	-g  BOWTIE2_GENOME   
+                Bowtie2 indexed reference genome. Basically, the folder containing the bwt2 indices are to be provided. 
+		Mandatory parameter if user provides fastq files as input (-f and -r options).
+		If user provides .bam files as input (-f option) then no need to provide this value.
 
 	-d  OutDir 			  
                 Output directory which will contain all the results.
 
-  -c  CONTROLBAM		 
-  
-  
-             Control file used to call MACS2. 
-						 The control file can be a single file, or can be a collection of files. 
-						 Even it may not be specified at all, in which case 
-						 MACS2 operates without any control.
-					 	 Control file can be either in BAM or in tagalign (.gz) format.
-					 	 If a set of control files are provided, user needs to 
-					 	 ensure that all of the files follow the same format.
+  	-c  CONTROLBAM		 
+             	Control file(s) used for peak calling using MACS2. One or more alignment files can be provided to be used 
+		as a control. It may not be specified at all, in which case MACS2 operates without any control. 
+		Control file can be either in BAM or in  (tagalign.gz) format. 
+		If multiple control files are provided, user needs to ensure that all of the 
+		control files follow the same format (i.e. either all BAM or all TAGAlign).
+		Example: -c control1.bam -c control2.bam puts two control files for using in MACS2.
+		
+		Conversion from BAM to TagAlign.gz format can be done using the script "TagAlign.sh" 
+		provided within the folder "bin".
              
-	-w 	BigWigGenome	 The reference genome which is used to convert BAM file to a BigWig file.
-						 If -g option is enabled (i.e. the Bowtie2 index genome is provided) 
-						 then this option is not required
- 						 as the reference genome will be derived from the genome 
- 						 name provided as the Bowtie2 index.
- 						 Otherwise, this option needs to be filled with the 
- 						 reference genome string (such as 'hg19', 'mm9', etc.)
-    -T  Tagmentation	 If 1, corresponds to the adjustment due to Tagmentation. 
-						 It shifts the forward and reverse strands by the transposon length, 
-						 forms a tagAlign file, and then calls peaks using this tagAlign 
-						 file. Similar to the ATAC seq. 
-						 The procedure is useful for ChIPMentation type of data. Default 0.	
+	-w 	BigWigGenome	 
+		Reference genome which is used to convert BAM file to a BigWig file. 
+		Used for visualization track creation purpose. 
+		If -g option is enabled (i.e. the Bowtie2 index genome is provided) then this option is not required. 
+		Otherwise, this is a mandatory parameter. Allowed values are 'hg19' (default), 'mm9', 'hg38', and 'mm10'.
+
+    	-T  Tagmentation	 
+		If 1, means that Tagmentation was used for ChIP file creation. Then, forward and reverse strands 
+		of the current ChIP signal are shifted by the transposon length, and a tagAlign file is generated. 
+		Peaks are called from this tagAlign file. Similar to the ATAC seq principle. 
+		Applicable for the ChIPMentation technique (Christian Schmidl et. al., 
+		ChIPmentation: fast, robust, low-input ChIP-seq for histones and transcription factors, 
+		Nature Methods volume 12, pages 963–965, 2015). Default value of this parameter is 0.	
+
+		
  	-D  DEBUG_TXT		 this flag signifies whether the read count and other 
  						 statistical paramters are computed or not. 
  						 Can be 1 or 0. If 1, the statistics is generated and 
