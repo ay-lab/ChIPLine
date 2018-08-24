@@ -1,10 +1,14 @@
 # ChIPLine 
 # a pipeline for ChIP-seq analysis
-# Devloped by : Sourya Bhattacharyya
-# Supervisors: Dr. Ferhat Ay and Dr. Pandurangan Vijayanand
-# La Jolla Institute for Allergy and Immunology
-# La Jolla, San Diego, CA 92037, USA
----------------------------------------
+# ---------------------------------------
+
+Developers
+--------------
+Devloped by : Sourya Bhattacharyya
+Supervisors: Dr. Ferhat Ay and Dr. Pandurangan Vijayanand
+La Jolla Institute for Allergy and Immunology
+La Jolla, San Diego, CA 92037, USA
+
 
 
 ChIPLine is a pipeline to analysis ChIP-seq data, starting from input Fastq/BAM files and generating alignment summary, various quality statistics, peak calling, and BigWig formatted tracks ready for visualization in UCSC genome browser.
