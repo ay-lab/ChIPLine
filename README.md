@@ -13,7 +13,9 @@ La Jolla, San Diego, CA 92037, USA
 
 
 #######################
+
 ChIPLine is a pipeline to analysis ChIP-seq data, starting from input Fastq/BAM files and generating alignment summary, various quality statistics, peak calling, and BigWig formatted tracks ready for visualization in UCSC genome browser.
+
 #######################
 
 Theory
@@ -67,92 +69,92 @@ Options:
 
 Mandatory parameters:
 
--C  ConfigFile		    
-             A configuration file to be separately provided. Mandatory parameter. 
-             Current package includes a sample configuration file named "configfile". 
-             Details of the entries in this file are mentioned later.
-              
--f  FASTQ1          
-            Read 1 (or forward strand) of paired-end sequencing data  [.fq|.gz|.bz2]. 
-	Or, even an aligned genome (.bam file) can be provided.
-        
--r  FASTQ2          
-            R2 of pair-end sequencing data [.fq|.gz|.bz2]. If not provided, and the -f parameter 
-            is not a BAM file, the input is assumed to be single ended.
-          
--n  PREFIX           
-            Prefix string of output files. For example, -n "TEST" means that the 
-            output filenames start with the string "TEST".
+	-C  ConfigFile		    
+	             A configuration file to be separately provided. Mandatory parameter. 
+	             Current package includes a sample configuration file named "configfile". 
+	             Details of the entries in this file are mentioned later.
+	              
+	-f  FASTQ1          
+	            Read 1 (or forward strand) of paired-end sequencing data  [.fq|.gz|.bz2]. 
+		Or, even an aligned genome (.bam file) can be provided.
+	        
+	-r  FASTQ2          
+	            R2 of pair-end sequencing data [.fq|.gz|.bz2]. If not provided, and the -f parameter 
+	            is not a BAM file, the input is assumed to be single ended.
+	          
+	-n  PREFIX           
+	            Prefix string of output files. For example, -n "TEST" means that the 
+	            output filenames start with the string "TEST".
 
--g  BOWTIE2_GENOME   
-            Bowtie2 indexed reference genome. Basically, the folder containing 
-            the bwt2 indices are to be provided. 
-            Mandatory parameter if user provides fastq files as input (-f and -r options).
-			If user provides .bam files as input (-f option) then no need to provide this value.
+	-g  BOWTIE2_GENOME   
+	            Bowtie2 indexed reference genome. Basically, the folder containing 
+	            the bwt2 indices are to be provided. 
+	            Mandatory parameter if user provides fastq files as input (-f and -r options).
+				If user provides .bam files as input (-f option) then no need to provide this value.
 
--d  OutDir 			  
-            Output directory which will contain all the results.
+	-d  OutDir 			  
+	            Output directory which will contain all the results.
 
--c  CONTROLBAM		 
-         	Control file(s) used for peak calling using MACS2. One or more 
-			alignment files can be provided to be used 
-			as a control. It may not be specified at all, in which 
-			case MACS2 operates without any control. 
-			Control file can be either in BAM or in  (tagalign.gz) format. 
-			If multiple control files are provided, user needs to ensure that all of the 
-			control files follow the same format (i.e. either all BAM or all TAGAlign).
-			Example: -c control1.bam -c control2.bam puts two control files for using in MACS2.
-	
-			Conversion from BAM to TagAlign.gz format can be done using the script "TagAlign.sh" 
-			provided within the folder "bin".
-	
--w 	BigWigGenome	 
-			Reference genome which is used to convert BAM file to a BigWig file. 
-			Used for visualization track creation purpose. 
-			If -g option is enabled (i.e. the Bowtie2 index genome is provided) 
-			then this option is not required. 
-			Otherwise, this is a mandatory parameter. Allowed values are 'hg19' 
-			(default), 'mm9', 'hg38', and 'mm10'.
+	-c  CONTROLBAM		 
+	         	Control file(s) used for peak calling using MACS2. One or more 
+				alignment files can be provided to be used 
+				as a control. It may not be specified at all, in which 
+				case MACS2 operates without any control. 
+				Control file can be either in BAM or in  (tagalign.gz) format. 
+				If multiple control files are provided, user needs to ensure that all of the 
+				control files follow the same format (i.e. either all BAM or all TAGAlign).
+				Example: -c control1.bam -c control2.bam puts two control files for using in MACS2.
+		
+				Conversion from BAM to TagAlign.gz format can be done using the script "TagAlign.sh" 
+				provided within the folder "bin".
+		
+	-w 	BigWigGenome	 
+				Reference genome which is used to convert BAM file to a BigWig file. 
+				Used for visualization track creation purpose. 
+				If -g option is enabled (i.e. the Bowtie2 index genome is provided) 
+				then this option is not required. 
+				Otherwise, this is a mandatory parameter. Allowed values are 'hg19' 
+				(default), 'mm9', 'hg38', and 'mm10'.
 
--T  Tagmentation	 
-			If 1, means that Tagmentation was used for ChIP file creation. 
-			Then, forward and reverse strands 
-			of the current ChIP signal are shifted by the transposon 
-			length, and a tagAlign file is generated. 
-			Peaks are called from this tagAlign file. Similar to the ATAC seq principle. 
-			Applicable for the ChIPMentation technique (Christian Schmidl et. al., 
-			ChIPmentation: fast, robust, low-input ChIP-seq for histones and transcription factors, 
-			Nature Methods volume 12, pages 963–965, 2015). Default value of this parameter is 0.			
-	
--D  DEBUG_TXT		 
-			Binary variable. If 1 (recommended), different statistics corresponding to 
-			quality metrics and reads are printed. Useful when a summary of a large set 
-			of ChIP-seq samples are to be generated.
-	
--q  MAPQ_THR		 
-			Quality value threshold, below which the mapped reads are removed (Default 30).
-	
--p  PEAKCALLGENOMESIZE 
-			genome size parameter for MACS2 peak calling ("hs", "mm", "ce", "dm": default "hs")
+	-T  Tagmentation	 
+				If 1, means that Tagmentation was used for ChIP file creation. 
+				Then, forward and reverse strands 
+				of the current ChIP signal are shifted by the transposon 
+				length, and a tagAlign file is generated. 
+				Peaks are called from this tagAlign file. Similar to the ATAC seq principle. 
+				Applicable for the ChIPMentation technique (Christian Schmidl et. al., 
+				ChIPmentation: fast, robust, low-input ChIP-seq for histones and transcription factors, 
+				Nature Methods volume 12, pages 963–965, 2015). Default value of this parameter is 0.			
+		
+	-D  DEBUG_TXT		 
+				Binary variable. If 1 (recommended), different statistics corresponding to 
+				quality metrics and reads are printed. Useful when a summary of a large set 
+				of ChIP-seq samples are to be generated.
+		
+	-q  MAPQ_THR		 
+				Quality value threshold, below which the mapped reads are removed (Default 30).
+		
+	-p  PEAKCALLGENOMESIZE 
+				genome size parameter for MACS2 peak calling ("hs", "mm", "ce", "dm": default "hs")
 
 Optional parameters:
 
--O 	Overwrite		 
-			Binary variable. If 1, overwrites the existing files (if any). Default = 0.
-					 
--t  NUMTHREADS              
-			Number of sorting, Bowtie2 mapping THREADS [Default = 1]. For parallel processing of Bowtie2, 
-			user should specify > 1 value such as 4 ot 8.
-	
--m  MAX_MEM          
-			Set max memory used for PICARD duplication removal [Default = 8G].
-	
--a  ALIGNVALIDMAX	 
-			Set the number of (max) valid alignments which will be searched [Default = 4] 
-			for Bowtie2.
-	
--l  MAXFRAGLEN 		 
-			Set the maximum fragment length to be used for Bowtie2 alignment [Default = 2000]
+	-O 	Overwrite		 
+				Binary variable. If 1, overwrites the existing files (if any). Default = 0.
+						 
+	-t  NUMTHREADS              
+				Number of sorting, Bowtie2 mapping THREADS [Default = 1]. For parallel processing of Bowtie2, 
+				user should specify > 1 value such as 4 ot 8.
+		
+	-m  MAX_MEM          
+				Set max memory used for PICARD duplication removal [Default = 8G].
+		
+	-a  ALIGNVALIDMAX	 
+				Set the number of (max) valid alignments which will be searched [Default = 4] 
+				for Bowtie2.
+		
+	-l  MAXFRAGLEN 		 
+				Set the maximum fragment length to be used for Bowtie2 alignment [Default = 2000]
 			
 
 Entries in the configuration file (first parameter)
@@ -162,134 +164,137 @@ The configuration file follows the format parameter=value
 
 And is to be filled with the following entries:
 
-sppexec=
-	executable of SPP R code (from the package phantompeakqualtools)
-	after installation. 
-	For example, /home/sourya/packages/phantompeakqualtools/run_spp.R.
+	sppexec=
+		executable of SPP R code (from the package phantompeakqualtools)
+		after installation. 
+		For example, /home/sourya/packages/phantompeakqualtools/run_spp.R.
 
-picardexec=
-	Path of Picard tool executable
-	Example: /home/sourya/packages/picard-tools/picard-tools-2.7.1/picard.jar
+	picardexec=
+		Path of Picard tool executable
+		Example: /home/sourya/packages/picard-tools/picard-tools-2.7.1/picard.jar
 
-HOMERPath=
-	Path of HOMER (after installation)
-	Example: /home/sourya/packages/HOMER/bin/
+	HOMERPath=
+		Path of HOMER (after installation)
+		Example: /home/sourya/packages/HOMER/bin/
 
-DeepToolsDir=
-	Path of deepTools executable
-	Example: /home/sourya/packages/deepTools/deepTools2.0/bin/
+	DeepToolsDir=
+		Path of deepTools executable
+		Example: /home/sourya/packages/deepTools/deepTools2.0/bin/
 
-RPackageExec=
-	Installed R package directory.
-	Example: /home/sourya/R-3.4.3/bin/Rscript
-	If left as blank, default Rscript installed in the system will be invoked.
+	RPackageExec=
+		Installed R package directory.
+		Example: /home/sourya/R-3.4.3/bin/Rscript
+		If left as blank, default Rscript installed in the system will be invoked.
 
-NarrowPeakASFile=
-	file (SQL) required to convert the narrowPeak file to the bigBed format
-	Download the file from this link (and save):
-	https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/encode/narrowPeak.as
-	Specify the location of this downloaded file:
-	Example: /home/sourya/genomes/chrsize/narrowPeak.as
+	NarrowPeakASFile=
+		file (SQL) required to convert the narrowPeak file to the bigBed format
+		Download the file from this link (and save):
+		https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/encode/narrowPeak.as
+		Specify the location of this downloaded file:
+		Example: /home/sourya/genomes/chrsize/narrowPeak.as
 
-BigNarrowPeakASFile=
-	file (SQL) required to convert the bignarrowPeak file to the bigBed format
-	Download the file from this link (and save):
-	https://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.as
-	Specify the location of this downloaded file:
-	Example: /home/sourya/genomes/chrsize/bigNarrowPeak.as
-	
-BroadPeakASFile=
-	file (SQL) required to convert the broadPeak file to the bigBed format
-	Download the file from this link (and save):
-	https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/encode/broadPeak.as
-	Specify the location of this downloaded file:
-	Example: /home/sourya/genomes/chrsize/broadPeak.as
-	
-RefChrSizeFile=
-	files containing chromosome size information
-	two column file storing the size of individual chromosomes
-	Downloaded from the link (depends on the reference Chromosome employed):
-	For example, the hg38.chrom.sizes file for the hg38 database is located at 
-	http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes.
-	Alternatively, Use the "fetchChromSizes" script from the UCSC repository 
-	to get the appropriate chromosome size file.
-	Specify the location of this downloaded file:
-	Example: /home/sourya/genomes/chrsize/hg38.chrom.sizes
-	
-RefChrFastaFile=
-	Fasta file of the reference Chromosome.
-	Can be downloaded from the link:
-	http://hgdownload.cse.ucsc.edu/downloads.html
-	Example: /home/sourya/genomes/Complete_Genome/hg38/hg38.fa
-	
-RefChrAnnotFile=
-	file containing reference UCSC annotation (.gtf format) 
-	corresponding to the reference Chromosome.
-	Can be downloaded from the link:
-	http://hgdownload.cse.ucsc.edu/downloads.html
-	Example: /home/sourya/genomes/Annotation/hg38/UCSC/hg38_UCSC_Annotation.gtf
+	BigNarrowPeakASFile=
+		file (SQL) required to convert the bignarrowPeak file to the bigBed format
+		Download the file from this link (and save):
+		https://genome.ucsc.edu/goldenPath/help/examples/bigNarrowPeak.as
+		Specify the location of this downloaded file:
+		Example: /home/sourya/genomes/chrsize/bigNarrowPeak.as
+		
+	BroadPeakASFile=
+		file (SQL) required to convert the broadPeak file to the bigBed format
+		Download the file from this link (and save):
+		https://genome-source.gi.ucsc.edu/gitlist/kent.git/blob/master/src/hg/lib/encode/broadPeak.as
+		Specify the location of this downloaded file:
+		Example: /home/sourya/genomes/chrsize/broadPeak.as
+		
+	RefChrSizeFile=
+		files containing chromosome size information
+		two column file storing the size of individual chromosomes
+		Downloaded from the link (depends on the reference Chromosome employed):
+		For example, the hg38.chrom.sizes file for the hg38 database is located at 
+		http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes.
+		Alternatively, Use the "fetchChromSizes" script from the UCSC repository 
+		to get the appropriate chromosome size file.
+		Specify the location of this downloaded file:
+		Example: /home/sourya/genomes/chrsize/hg38.chrom.sizes
+		
+	RefChrFastaFile=
+		Fasta file of the reference Chromosome.
+		Can be downloaded from the link:
+		http://hgdownload.cse.ucsc.edu/downloads.html
+		Example: /home/sourya/genomes/Complete_Genome/hg38/hg38.fa
+		
+	RefChrAnnotFile=
+		file containing reference UCSC annotation (.gtf format) 
+		corresponding to the reference Chromosome.
+		Can be downloaded from the link:
+		http://hgdownload.cse.ucsc.edu/downloads.html
+		Example: /home/sourya/genomes/Annotation/hg38/UCSC/hg38_UCSC_Annotation.gtf
+
 Describing output of ChIP-seq analysis
+-----------------------------------------
+
 Within the folder "OutDir" (base directory containing all the outputs of 
 current ChIP-seq analysis, following files (f) and folders (F) exist):
 
-F1: Alignment_MAPQ30
+	F1: Alignment_MAPQ30
 
-	f1: UniqMappedRead.bam
-		Initial alignment after unique mapping.
-	f2: Bowtie2_del_Random.bam
-		Alignment after deleting random reads.
-	f3: Bowtie2_del_Mitch.bam: 
-		After deleting mitochondrial reads.	
-	f4: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.bam
-		Sorted, and MAPQ thresholded alignment.
-	f5: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.bam.bai
-		Corresponding index.
-	f6: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.rmdup.bam
-		De-duplicated alignment (used for subsequent operations)
-	f7: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.picard_metrics.txt
-		Corresponding PICARD metrics log file.
+		f1: UniqMappedRead.bam
+			Initial alignment after unique mapping.
+		f2: Bowtie2_del_Random.bam
+			Alignment after deleting random reads.
+		f3: Bowtie2_del_Mitch.bam: 
+			After deleting mitochondrial reads.	
+		f4: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.bam
+			Sorted, and MAPQ thresholded alignment.
+		f5: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.bam.bai
+			Corresponding index.
+		f6: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.rmdup.bam
+			De-duplicated alignment (used for subsequent operations)
+		f7: ${PREFIX}.align.sort.MAPQ${MAPQ_THR}.picard_metrics.txt
+			Corresponding PICARD metrics log file.
+			
+	F2: Out_BigWig
+		f1: ${PREFIX}.bw 
+			bigwig file for track visualization.
+
+	F3: Out_BigWig_NormCov:
+		f1: ${PREFIX}_NormCov.bw
+			bigwig file for track visualization (after normalizing the coverage).
+
+	F4: MACS2_Default_*
+		Contains peaks employing MACS2 with default parameters.
+			f1: *.narrowPeak: narowpeak formatted output with P-value threshold of 0.01
+			f2: *.narrowPeak_Q0.05filt: peaks with Q-value threshold of 0.05
+			f3: *.narrowPeak_Q0.01filt: peaks with Q-value threshold of 0.01
+			f4: *.broadPeak: broadpeak formatted output with P-value threshold of 0.01
+			f5: *.broadPeak_Q0.05filt: peaks with Q-value threshold of 0.05
+			f6: *.broadPeak_Q0.01filt: peaks with Q-value threshold of 0.01
+			f7: out_FRiP.txt: FRIP statistics for the narrow and broad peaks.
+			f8: Peak_Statistics.txt: number of peaks
+			F9: Peak_Annotate_Q*:
+				For Q-value thresholds of either 0.01 or 0.05, contains the 
+				HOMER based annotations.
+			
+			In addition, files *.bb denote corresponding big-bd formatted peaks,
+			useful for USCSC track visualization.
+			
+	F5: MACS2_Ext_*
+		Contains peaks employing MACS2 with the parameters:
+			--nomodel --nolambda --shift 0 --extsize 200
+		File structure is similar as above.
+
+	F6: Peak_Overlap_Statistics
+		Overlapping peaks corresponding to the settings F4 and F5
 		
-F2: Out_BigWig
-	f1: ${PREFIX}.bw 
-		bigwig file for track visualization.
-
-F3: Out_BigWig_NormCov:
-	f1: ${PREFIX}_NormCov.bw
-		bigwig file for track visualization (after normalizing the coverage).
-
-F4: MACS2_Default_*
-	Contains peaks employing MACS2 with default parameters.
-		f1: *.narrowPeak: narowpeak formatted output with P-value threshold of 0.01
-		f2: *.narrowPeak_Q0.05filt: peaks with Q-value threshold of 0.05
-		f3: *.narrowPeak_Q0.01filt: peaks with Q-value threshold of 0.01
-		f4: *.broadPeak: broadpeak formatted output with P-value threshold of 0.01
-		f5: *.broadPeak_Q0.05filt: peaks with Q-value threshold of 0.05
-		f6: *.broadPeak_Q0.01filt: peaks with Q-value threshold of 0.01
-		f7: out_FRiP.txt: FRIP statistics for the narrow and broad peaks.
-		f8: Peak_Statistics.txt: number of peaks
-		F9: Peak_Annotate_Q*:
-			For Q-value thresholds of either 0.01 or 0.05, contains the 
-			HOMER based annotations.
+	f7: chipSampleMaster.tagAlign.pdf
+		Quality metric display using cross correlation analysis.
 		
-		In addition, files *.bb denote corresponding big-bd formatted peaks,
-		useful for USCSC track visualization.
+	f8: out_NRF_MAPQ30.txt
+		Metric NRF
 		
-F5: MACS2_Ext_*
-	Contains peaks employing MACS2 with the parameters:
-		--nomodel --nolambda --shift 0 --extsize 200
-	File structure is similar as above.
-
-F6: Peak_Overlap_Statistics
-	Overlapping peaks corresponding to the settings F4 and F5
-	
-f7: chipSampleMaster.tagAlign.pdf
-	Quality metric display using cross correlation analysis.
-	
-f8: out_NRF_MAPQ30.txt
-	Metric NRF
-	
-f9: Read_Count_Stat.txt
-	Read count statistics.
+	f9: Read_Count_Stat.txt
+		Read count statistics.
 
 Summarizing a list of ChIP-seq analysis
 ---------------------------------------
@@ -299,29 +304,28 @@ Suppose, a directory "/home/sourya/Results" contain within it, the following fol
 
 To get a summarized list of performance metrics for these samples, use the script "ResSummary2.r".
 
-Rscript ResSummary2.r [positional_arguments]:
+	Rscript ResSummary2.r [positional_arguments]:
 
-1) OutBaseDir: 
-	Directory under which results of all the different samples are stored
+	1) OutBaseDir: 
+		Directory under which results of all the different samples are stored
 
-2) BAMRead: 
-	Boolean variable, indicating if the BAM files were used for 
-	analysis (1) or fastq (0). Default 0
+	2) BAMRead: 
+		Boolean variable, indicating if the BAM files were used for 
+		analysis (1) or fastq (0). Default 0
 
-3) Tagmentation: 
-	Binary variable. If 1, denotes that the data samples 
-	have been under ChIPMentation method. Default 0.
-		
-4) OldMethod:  
-	Use 0 for this parameter.
+	3) Tagmentation: 
+		Binary variable. If 1, denotes that the data samples 
+		have been under ChIPMentation method. Default 0.
+			
+	4) OldMethod:  
+		Use 0 for this parameter.
 
-5) ControlPeak: 
-	Variable with value of either 0, 1 or 2. 
-	If 1, control samples has been used for peak calling. 
-	If 0, no control sample is used. 
-	If 2, peaks using control and not using control both exist. 
-	Default 0.
-
+	5) ControlPeak: 
+		Variable with value of either 0, 1 or 2. 
+		If 1, control samples has been used for peak calling. 
+		If 0, no control sample is used. 
+		If 2, peaks using control and not using control both exist. 
+		Default 0.
 
 Sample execution command:
 
