@@ -14,7 +14,9 @@ La Jolla, San Diego, CA 92037, USA
 
 #######################
 
-ChIPLine is a pipeline to analysis ChIP-seq data, starting from input Fastq/BAM files and generating alignment summary, various quality statistics, peak calling, and BigWig formatted tracks ready for visualization in UCSC genome browser.
+ChIPLine is a pipeline to analysis ChIP-seq data, starting from input Fastq/BAM files and generating alignment summary, various quality statistics, peak calling, and BigWig formatted tracks ready for visualization in UCSC genome browser. It also performs IDR analysis between a set of peak 
+files or even a set of BAM alignment files (in which case, peaks are estimated first) 
+corresponding to a set of biological or technical ChIP-seq replicates.
 
 #######################
 
