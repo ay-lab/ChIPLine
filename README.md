@@ -29,10 +29,13 @@ User can check the following papers or links for understanding ChIP-seq QCs:
 
 3) https://www.biostars.org/p/205576/
 
-Required packages
--------------------
+4) https://sites.google.com/site/anshulkundaje/projects/idr#TOC-Latest-pipeline (for IDR analysis)
 
-ChIPLine requires the following packages / libraries to be installed in the system.
+Required packages for executing basic ChIP-seq pipeline
+-------------------------------------------------------
+
+When executing basic ChIP-seq pipeline, user should install following 
+packages / libraries in the system:
 
 1) Bowtie2 (we have used version 2.3.3.1) http://bowtie-bio.sourceforge.net/bowtie2/index.shtml
 
@@ -57,8 +60,22 @@ for example, is provided in this link: http://hgdownload.soe.ucsc.edu/admin/exe/
 User should include the PATH of above mentioned libraries / packages inside their SYSTEM PATH variable. 
 Some of these PATHS are also to be mentioned in a separate configuration file (mentioned below).
 
-Execution
-------------
+
+Required packages for executing IDR code
+------------------------------------------
+
+In addition, when user requires to execute the IDR code, 
+following packages / libraries are to be installed in the system:
+
+1) sambamba (we have used version 0.6.7) http://lomereiter.github.io/sambamba/
+
+2) The package IDRCode (available in https://drive.google.com/file/d/0B_ssVVyXv8ZSX3luT0xhV3ZQNWc/view?usp=sharing). Unzip the archieve and store in convenient location. Path of this 
+archieve is to be provided for executing IDR code.
+
+
+
+Execution of basic ChIP-seq pipeline
+------------------------------------
 
 Current package includes a sample script file "pipeline_exec.sh". It conains sample commands required to 
 invoke the main executable named "pipeline.sh", which is provided within the folder "bin".
@@ -330,6 +347,126 @@ To get a summarized list of performance metrics for these samples, use the scrip
 Sample execution command:
 
 Rscript ResSummary2.r /home/sourya/ChIPResults/ 0 1 0 2
+
+	Which means that 
+		
+		OutBaseDir=/home/sourya/ChIPResults/
+		
+		BAMRead=0
+		
+		Tagmentation=1
+		
+		OldMethod=0
+		
+		ControlPeak=2
+
+
+
+
+Command for executing IDR codes
+---------------------------------
+
+Current pipeline supports IDR analysis between either a list of ChIP-seq peak files 
+or between a list of alignment (BAM) files. In the second case, first the BAM files 
+are analyzed and subsampled to contain equal number of reads (minimum number of reads 
+contained in the inputs), and subsequently, peaks are estimated from these 
+(subsampled) BAM files using MACS2. These peaks are then applied for IDR analysis.
+
+The script "sample_IDR_Script.sh" included within this package 
+shows calling following two functions (both are included within the folder 
+"IDR_Codes"):
+
+	1) IDRMain.sh
+
+	2) IDR_SubSampleBAM_Main.sh
+
+	The first script, IDRMain.sh, performs IDR between two or more 
+	input peak files (we have used peaks estimated from MACS2). The parameters 
+	corresponding to this script are as follows:
+
+	-I  InpFile        	 
+			A list of input peak files (obtained from MACS2 - in .narrowPeak or .narrowPeak.gz format). 
+			At least two peak files are required. 
+	
+	-P 	PathIDRCode		 
+			Path of the IDRCode package (Kundaje et. al. after its installation). 
+			Please check the "Required packages" section for the details.
+
+	-d  OutDir 		 	 
+			Output directory (absolute path preferred) which will store the IDR results.
+
+	-n 	PREFIX 			 
+			Prefix of output files. Default 'IDR_ChIP'.
+
+	A sample execution of this script is as follows:
+
+	./IDRMain.sh -I peak1.narrowPeak -I peak2.narrowPeak -I peak3.narrowPeak -P /home/sourya/packages/idrCode/ -d /home/sourya/OutDir_IDR -n 'IDR_test'
+
+
+
+	The second script, IDR_SubSampleBAM_Main.sh, takes input of two or more BAM files, 
+	estimates peaks from these BAM files, and then performs IDR analysis. The parameters 
+	corresponding to this script are as follows:
+
+	-I  InpFile        	 
+			A list of input BAM files. At least two BAM files are required. 
+	
+	-P 	PathIDRCode		 
+			Path of the IDRCode package (Kundaje et. al. after its installation). 
+			Please check the "Required packages" section for the details.
+
+	-d  OutDir 		 	 
+			Output directory (absolute path preferred) which will store the IDR results.
+
+	-n 	PREFIX 			 
+			Prefix of output files. Default 'IDR_ChIP'.
+
+	-c  CountPeak		 
+			No of peaks in both replicates that will be compared for IDR analysis.
+			Default 25000.
+	
+	-T 	Tagmentation	 
+			Binary variable. If 1, the input is a ChiPMentation data 
+			where the TAG Align files are created by 
+			shifting the strands a bit. Default 0. 
+			Tag align files are used for estimating peaks using MACS2.
+	
+	-C  CONTROLBAM		 
+			Control file (in eiher .BAM or tagalign file in .gz format)	
+			used to estimate the peaks from MACS2. User may leave this field 
+			blank if no control file is available.
+
+	A sample execution of this script is as follows:
+
+	./IDR_SubSampleBAM_Main.sh -I inpfile1.bam -I inpfile2.bam -P /home/sourya/packages/idrCode/ -d /home/sourya/OutDir_IDR -n 'IDR_test' -c 25000 -T 1 -C control.bam
+
+
+Describing output of IDR analysis
+----------------------------------
+
+In the specified output directory "OutDir" mentioned in the IDR script, following 
+files (f) and folders (F) exist:
+
+	F1: Folders of the name $i$_and_$j$ where 0 <= i < N and 1 <= j <= N, where N is 
+	the number of replicates analyzed. Individual folders contain results for 
+	pairwise IDR analysis. For example, folder 0_and_1 contain IDR analysis 
+	for the sample 0 (first replicate) and the sample 1 (second replicate).
+
+	f1 : "Replicate_Names.txt" : names of the replicate samples used for IDR analysis.
+
+	f2: Input_Peak_Statistics.txt: number of peaks and the peak containing replicates.
+
+	f3: IDR_Batch_Plot-plot.pdf: final IDR plot. Here individual pairs (whose results 
+		are stored in the above mentioned folders) are numbered 1, 2, ...
+		Consideing N = 3, the number of pairs possible is also 3. Here, 
+		the number 1 denotes the folder (pair) 0_and_1, 
+		2 denotes the folder (pair) 0_and_2, and 3 denotes the 
+		folder (pair) 1_and_2.
+
+
+
+
+
 
 Contact
 -----------
