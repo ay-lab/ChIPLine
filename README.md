@@ -256,7 +256,7 @@ Describing output of ChIP-seq analysis
 Within the folder "OutDir" (base directory containing all the outputs of 
 current ChIP-seq analysis, following files (f) and folders (F) exist):
 
-	F1: Alignment_MAPQ30
+	F1: Alignment_MAPQ${MAPQ_THR}
 
 		f1: UniqMappedRead.bam
 			Initial alignment after unique mapping.
