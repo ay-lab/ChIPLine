@@ -1,15 +1,4 @@
-#!/bin/bash -ex
-#PBS -l nodes=1:ppn=1
-#PBS -l mem=10GB
-#PBS -l walltime=24:00:00
-#PBS -m ae
-#PBS -j eo
-#PBS -V
-source ~/.bashrc
-#source ~/.bash_profile
-hostname
-TMPDIR=/scratch
-cd $PBS_O_WORKDIR
+#!/bin/bash
 
 #=================
 # main executable script of the ChIP seq pipeline
@@ -19,14 +8,46 @@ cd $PBS_O_WORKDIR
 # La Jolla Institute for Allergy and Immunology
 #=================
 
-CodeExec=`pwd`'/pipeline.sh'
+CodeExec=`pwd`'/bin/pipeline.sh'
 
-inpfile='/mnt/NGSAnalyses/ChIP-Seq/Mapping/004997_Log7_DY_R24_NK_ChIP_Merged/All_Uniquely_Mapped_BAM_Files/016_A_NK_16_GM12878_CTRL_Final.bam'
-outdir='/mnt/BioAdHoc/Groups/vd-vijay/sourya/ChIP_seq/VIJAY_LAB_DATASETS/004997_Log7_DY_R24_NK_ChIP_Merged/016_A_NK_16_GM12878_CTRL_Final_Copy/'
+#=================
+# script 1 - when fastq files of paired end read are provided as the input
+#=================
 
-# refgenome='/mnt/BioHome/ferhatay/data/bowtie2_indexes/hg19-full/hg19'
-# $CodeExec -C 'configfile' -f $inpfile -n '001_RunA_SLE10_S1057a_1_Final' -g $refgenome -d $outdir -t 8 -m '16G' -q 30 -T 1 -D 1 -O 1
-$CodeExec -C 'configfile' -f $inpfile -n '016_A_NK_16_GM12878_CTRL' -d $outdir -t 8 -m '16G' -q 30 -T 1 -D 0 -O 0 -w "hg38"
+genome='/home/sourya/genomes/bowtie2_index/hg19/hg19'
+dirdata='/home/sourya/test1/'
+inpfile1=$dirdata'fastafiles/001_R1.fastq.gz'
+inpfile2=$dirdata'fastafiles/001_R2.fastq.gz'
+outdir=$dirdata'Sample_TEST_ChIP'
+prefix='001'
+
+$CodeExec -f $inpfile1 -r $inpfile2 -C `pwd`'/configfile' -n $prefix -g $genome -d $outdir -t 8 -m "16G" -q 20 -D 1 -O 1 -T 1
+
+#=================
+# script 2 - when fastq files of single end end read are provided as the input
+#=================
+
+genome='/home/sourya/genomes/bowtie2_index/hg19/hg19'
+dirdata='/home/sourya/test2/'
+inpfile=$dirdata'merged_inp.fastq.gz'
+outdir=$dirdata'Sample_TEST_ChIP'
+prefix='002'
+
+$CodeExec -f $inpfile -C `pwd`'/configfile' -n $prefix -g $genome -d $outdir -t 8 -m "16G" -q 20 -D 1 -O 1 -T 1
+
+#=================
+# script 3 - when a BAM file is provided as the input
+# here reference genome is not used
+# however, -w parameter is used to specify the genome for 
+# creating UCSC compatible tracks
+#=================
+
+dirdata='/home/sourya/test3/'
+inpfile=$dirdata'inp.bam'
+outdir=$dirdata'Sample_TEST_ChIP'
+prefix='003'
+
+$CodeExec -f $inpfile -C `pwd`'/configfile' -n $prefix -d $outdir -t 8 -m "16G" -q 20 -D 1 -O 1 -w "hg19" -T 1
 
 
 
