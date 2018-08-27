@@ -309,7 +309,7 @@ current ChIP-seq analysis, following files (f) and folders (F) exist):
 	f7: chipSampleMaster.tagAlign.pdf
 		Quality metric display using cross correlation analysis.
 		
-	f8: out_NRF_MAPQ30.txt
+	f8: out_NRF_MAPQ${MAPQ_THR}.txt
 		Metric NRF
 		
 	f9: Read_Count_Stat.txt
