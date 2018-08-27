@@ -1,15 +1,4 @@
-#!/bin/bash -ex
-#PBS -l nodes=1:ppn=1
-#PBS -l mem=10GB
-#PBS -l walltime=24:00:00
-#PBS -m ae
-#PBS -j eo
-#PBS -V
-source ~/.bashrc
-#source ~/.bash_profile
-hostname
-TMPDIR=/scratch
-cd $PBS_O_WORKDIR
+#!/bin/bash
 
 #=================================
 # sample script for IDR execution
@@ -37,9 +26,9 @@ IDRCodePackage='/home/sourya/packages/idrCode/'
 # top 25K common peaks between two samples are experimented
 #====================
 
-SampleBaseDir='/mnt/BioAdHoc/Groups/vd-vijay/sourya/ChIP_seq/VIJAY_LAB_DATASETS/004995_Log7_DY_R24_CD4N_ChIP_edited_Merged/'
+SampleBaseDir='/home/sourya/test1/'
 
-$IDRScript -I $SampleBaseDir'096_F_CD4N_16_GM12878_CTRL_Final/MACS2_Default_Tag_No_Control/096_F_CD4N_16_GM12878_CTRL_Final.macs2_peaks.narrowPeak_Q0.01filt' -I $SampleBaseDir'080_E_CD4N_16_GM12879_CTRL_Final/MACS2_Default_Tag_No_Control/080_E_CD4N_16_GM12879_CTRL_Final.macs2_peaks.narrowPeak_Q0.01filt' -d '/mnt/BioAdHoc/Groups/vd-vijay/sourya/ChIP_seq/VIJAY_LAB_DATASETS/004995_Log7_DY_R24_CD4N_ChIP_edited_Merged_IDR/Sample_IDR_Peaks' -P $IDRCodePackage
+$IDRScript -I $SampleBaseDir'Sample1/MACS2_Default_Tag_No_Control/Sample1.macs2_peaks.narrowPeak_Q0.01filt' -I $SampleBaseDir'Sample2/MACS2_Default_Tag_No_Control/Sample2.macs2_peaks.narrowPeak_Q0.01filt' -d $SampleBaseDir'/Sample_IDR_Peaks' -P $IDRCodePackage
 
 
 #====================
@@ -55,9 +44,9 @@ $IDRScript -I $SampleBaseDir'096_F_CD4N_16_GM12878_CTRL_Final/MACS2_Default_Tag_
 # user may reset it to 0, depending on the ChIP sample
 #====================
 
-SampleBaseDir='/mnt/BioAdHoc/Groups/vd-vijay/sourya/ChIP_seq/VIJAY_LAB_DATASETS/004995_Log7_DY_R24_CD4N_ChIP_edited_Merged/'
+SampleBaseDir='/home/sourya/test2/'
 
-$IDRScriptBAM -I $SampleBaseDir'096_F_CD4N_16_GM12878_CTRL_Final/Alignment_MAPQ30/096_F_CD4N_16_GM12878_CTRL_Final.align.sort.MAPQ30.rmdup.bam' -I $SampleBaseDir'080_E_CD4N_16_GM12879_CTRL_Final/Alignment_MAPQ30/080_E_CD4N_16_GM12879_CTRL_Final.align.sort.MAPQ30.rmdup.bam' -d '/mnt/BioAdHoc/Groups/vd-vijay/sourya/ChIP_seq/VIJAY_LAB_DATASETS/004995_Log7_DY_R24_CD4N_ChIP_edited_Merged_IDR/Sample_IDR_BAMFiles' -P $IDRCodePackage -c 25000 -T 1
+$IDRScriptBAM -I $SampleBaseDir'Sample1/Alignment_MAPQ30/Sample1.align.sort.MAPQ30.bam' -I $SampleBaseDir'Sample2/Alignment_MAPQ30/Sample2.align.sort.MAPQ30.bam' -d $SampleBaseDir'/Sample_IDR_BAMFiles' -P $IDRCodePackage -c 25000 -T 1
 
 
 
