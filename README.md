@@ -75,6 +75,17 @@ following packages / libraries are to be installed in the system:
 archieve is to be provided for executing IDR code.
 
 
+Packages to be installed for peak analysis
+----------------------------------------------
+
+The package phantompeakqualtools (https://github.com/kundajelab/phantompeakqualtools) to be installed. You may check this webpage for installing this package along with its dependencies.
+
+git clone https://github.com/kundajelab/phantompeakqualtools
+
+Then, install the R packages: snow (for parallel processing), snowfall, bitops, caTools, spp
+
+Also install the bioconductor package Rsamtools
+
 
 Execution of basic ChIP-seq pipeline
 ------------------------------------
