@@ -280,9 +280,9 @@ do
 			if [ $param == "DeepToolsDir" ]; then
 				DeepToolsDir=$paramval
 			fi		
-			if [ $param == "RPackageExec" ]; then
-				RPackageExec=$paramval
-			fi			
+			# if [ $param == "RPackageExec" ]; then
+			# 	RPackageExec=$paramval
+			# fi			
 			if [ $param == "NarrowPeakASFile" ]; then
 				NarrowPeakASFile=$paramval
 			fi			
@@ -305,7 +305,7 @@ do
 	fi
 done < $ConfigFile
 
-if [[ -z sppexec ]]; then
+if [[ -z $sppexec ]]; then
 	echo 'SPP executable path (from the package phantompeakqualtools by Anshul Kundaje et al.) is not provided - check the configuration file - quit !! '
 	exit 1
 fi
@@ -325,10 +325,10 @@ if [[ -z $DeepToolsDir ]]; then
 	exit 1
 fi
 
-if [[ -z $RPackageExec ]]; then
-	echo 'R executable is not provided - check the configuration file - quit !! '
-	exit 1
-fi
+# if [[ -z $RPackageExec ]]; then
+# 	echo 'R executable is not provided - check the configuration file - quit !! '
+# 	exit 1
+# fi
 
 if [[ -z $NarrowPeakASFile ]]; then
 	echo 'File to convert narrowPeak to BigBed (NarrowPeakASFile) is not provided - check the configuration file - quit !! '
@@ -365,6 +365,9 @@ fi
 # which annotates peaks according to different genomic segments
 HOMERPeakAnnotExec=$HOMERPath'/annotatePeaks.pl'
 
+# R package executable
+RPackageExec=`which Rscript`
+
 #----------------------------------
 # select the chromosome size file, reference fasta file, reference UCSC annotation file,
 # and the effective genome size (for normalized signal track generation) according to the 
@@ -390,6 +393,9 @@ elif [[ $BOWTIE2_GENOME = *"mm10"* || $BigWigGenome = *"mm10"* ]]; then
 	# RefChrSizeFile=$Refmm10ChrSize
 	# RefChrFastaFile=$mm10_fastafile
 	# RefChrAnnotFile=$mm10_ucsc_annotationfile
+	EGS=2652783500
+elif [[ $BOWTIE2_GENOME = *"rn6"* || $BigWigGenome = *"rn6"* ]]; then
+	# use mouse effective genome size
 	EGS=2652783500
 else
 	EGS=0
