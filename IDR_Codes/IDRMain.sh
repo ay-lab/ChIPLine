@@ -112,7 +112,11 @@ echo 'Summarizing the peak count statistics for individual input files: ' > $Pea
 for (( i=0; i<${nsample}; i++ ))
 do
 	peakfile=${InpFile[$i]}
-	pc=`cat $peakfile | wc -l`
+	if [[ $(basename "$peakfile") =~ \.gz$ ]]; then
+		pc=`zcat $peakfile | awk '(!($1 ~ /_|random/))' - | wc -l`
+	else
+		pc=`cat $peakfile | awk '(!($1 ~ /_|random/))' - | wc -l`
+	fi
 	echo "Analyzing the peak file: $peakfile " >> $PeakStatFile
 	echo "Peak count: $pc " >> $PeakStatFile
 	if [ $i == 0 ]; then
@@ -192,6 +196,26 @@ if [ ! -f $OutDir'/IDR_Batch_Plot-plot.pdf' ]; then
 
 fi
    
+##=======================
+## declare the final set of IDR peaks
+##=======================
+
+for IDRThr in 0.05 0.1; do
+	OutFile=$OutDir'/FINAL_IDR_Peaks_FDR'$IDRThr'.txt'
+	tempOutFile=$OutDir'/temp_IDR_Peaks_FDR'$IDRThr'.txt'
+	targetcmd='cat '
+	for (( i=0; i<${nsample}-1; i++ )); do
+		for (( j=$i+1; j<${nsample}; j++ )); do
+			targetcmd=$targetcmd' '$OutDir'/'$i'_and_'$j'/FINAL_IDR_Peaks/IDR_Peaks_FDR'$IDRThr'.txt'
+		done
+	done
+	targetcmd=$targetcmd" | cut -f1-3 | awk '((\$2 != \"start1\") && (\$3 > \$2))' - | sort -k1,1 -k2,2n -k3,3n > "$tempOutFile
+	echo $targetcmd
+	eval $targetcmd
+	bedtools merge -i $tempOutFile > $OutFile
+	rm $tempOutFile
+done
+
 #----------------------------------
 # important - sourya
 # now restore the original directory
