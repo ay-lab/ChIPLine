@@ -13,40 +13,30 @@ args <- commandArgs(TRUE)
 
 # file containing the overlapped peak information
 CommonPeakFile <- args[1]
-inpdir <- dirname(CommonPeakFile)
-
 npeak1 <- as.integer(args[2])
 npeak2 <- as.integer(args[3])
 
-# print(sprintf("\n CommonPeakFile: %s ", CommonPeakFile))
-# print(sprintf("\n npeak1: %s ", npeak1))
-# print(sprintf("\n npeak2: %s ", npeak2))
+inpdir <- dirname(CommonPeakFile)
 
-# information of the common peak
-# Note: the file contains a header line
+## read the common peaks
+## by default, it'll remove the row names
 CommonPeakInfo <- read.table(CommonPeakFile, header=TRUE)
 
+## error check
+## sometimes, the output file may not have proper chromosome or interval information
+## match chromosome names, 
+CommonPeakInfo <- CommonPeakInfo[which(CommonPeakInfo[,1] == CommonPeakInfo[,5]), ]
+
 # number of overlapped peaks (considering all the IDR values)
-ncommonpeak <- length(CommonPeakInfo[,1])
+ncommonpeak <- nrow(CommonPeakInfo)
 fracpeak1 <- (ncommonpeak * 1.0) / npeak1
 fracpeak2 <- (ncommonpeak * 1.0) / npeak2
 
-# print(sprintf("\n ncommonpeak: %s ", ncommonpeak))
-# print(sprintf("\n fracpeak1: %s ", fracpeak1))
-# print(sprintf("\n fracpeak2: %s ", fracpeak2))
-
-# find the rows where IDR is greater than a specified threshold
-# we employ both 0.05 and 0.1 as thresholds
-
+# peaks with IDR <= specified thresholds (0.05 and 0.1) 
 NumIDRPass1 <- length(which(CommonPeakInfo[,10] <= 0.05))
 FracIDRPass1 <- (NumIDRPass1 * 1.0) / ncommonpeak
 NumIDRPass2 <- length(which(CommonPeakInfo[,10] <= 0.1))
 FracIDRPass2 <- (NumIDRPass2 * 1.0) / ncommonpeak
-
-# print(sprintf("\n NumIDRPass1: %s ", NumIDRPass1))
-# print(sprintf("\n FracIDRPass1: %s ", FracIDRPass1))
-# print(sprintf("\n NumIDRPass2: %s ", NumIDRPass2))
-# print(sprintf("\n FracIDRPass2: %s ", FracIDRPass2))
 
 # divide the input overlapped peak files into two different structures
 # corresponding to the peak information of two different inputs
@@ -86,48 +76,8 @@ for (x in seq(0, 1, 0.1)) {
 		if (x == 0.5) {
 			frac_overlap_50Pct = frac_common
 		}
-
-		# print(sprintf("\n Percentile value: %s ", x))
-		# print(sprintf("\n nsample: %s ", nsample))
-		# print(sprintf("\n ncommon: %s ", ncommon))
-		# print(sprintf("\n frac_common: %s ", frac_common))
 	}
 }
-
-# print(sprintf("\n Mean of fraction overlap: %s ", mean(fraction_overlap)))
-
-# # we check the percent of samples in both peak sets
-# # and find out the overlap of peaks
-# # for individual 10% bins
-
-# nbins <- 5	#10
-# fraction_overlap2 <- c()
-# sampleperbin <- as.integer(ncommonpeak / nbins)
-
-# for (b in (1:nbins)) {
-# 	if (b == 1) {
-# 		si <- 1
-# 		ei <- si + sampleperbin - 1
-# 	} else {
-# 		si <- ei + 1
-# 		if (b == nbins) {
-# 			ei <- ncommonpeak
-# 		} else {
-# 			ei <- si + sampleperbin - 1
-# 		}
-# 	}
-# 	OverlapSet <- PeakInfoInput1_Sort[si:ei, 1] %in% PeakInfoInput2_Sort[si:ei, 1]
-# 	ncommon <- length(OverlapSet[OverlapSet==TRUE])
-# 	frac_common <- (ncommon * 1.0 / (ei-si+1))
-# 	fraction_overlap2 <- c(fraction_overlap2, frac_common)
-# 	print(sprintf("\n si: %s ", si))
-# 	print(sprintf("\n ei: %s ", ei))
-# 	print(sprintf("\n ncommon: %s ", ncommon))
-# 	print(sprintf("\n frac_common: %s ", frac_common))
-# }
-
-# print(sprintf("\n Mean of fraction overlap2: %s ", mean(fraction_overlap2)))
-
 
 # write the results in a text file
 OutFilename <- paste0(inpdir, '/Stat.tab')
@@ -136,6 +86,23 @@ fp <- file(OutFilename, open="w")
 write(paste0('NPeak1', '\t', 'NPeak2', '\t', 'CommonPeak', '\t', 'FracPeak1', '\t', 'FracPeak2', '\t', 'IDR_0.05_Peak', '\t', 'Frac_IDR_0.05_Peak', '\t', 'IDR_0.1_Peak', '\t', 'Frac_IDR_0.1_Peak', '\t', 'MeanOverlap', '\t', 'Overlap10', '\t', 'Overlap20', '\t', 'Overlap50'), file=fp, append=T)
 write(paste(npeak1, '\t', npeak2, '\t', ncommonpeak, '\t', fracpeak1, '\t', fracpeak2, '\t', NumIDRPass1, '\t', FracIDRPass1, '\t', NumIDRPass2, '\t', FracIDRPass2, '\t', mean(fraction_overlap), '\t', frac_overlap_10Pct, '\t', frac_overlap_20Pct, '\t', frac_overlap_50Pct), file=fp, append=T)
 close(fp)
+
+
+##========================
+## dump the significant peaks with respect to specific IDR thresholds
+##========================
+
+IDROutDir <- paste0(dirname(CommonPeakFile), '/FINAL_IDR_Peaks')
+system(paste("mkdir -p", IDROutDir))
+
+for (IDRThr in c(0.05, 0.1)) {
+	outfile <- paste0(IDROutDir, '/IDR_Peaks_FDR', IDRThr, '.txt')
+	idx <- which(CommonPeakInfo[, ncol(CommonPeakInfo)] <= IDRThr)
+	write.table(CommonPeakInfo[idx, ], outfile, row.names=F, col.names=T, sep="\t", quote=F, append=F)
+}
+
+
+
 
 
 
