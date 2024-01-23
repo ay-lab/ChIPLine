@@ -51,9 +51,9 @@ packages / libraries in the system:
 downloaded from UCSC repository. Executables corresponding to the linux system, 
 for example, is provided in this link: http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/
 
-6) deepTools (we have used version 2.0) https://deeptools.readthedocs.io/en/develop/
+6) deepTools (we have used version 3.5.1; requires Python 3.7.12) https://deeptools.readthedocs.io/en/develop/
 
-7) MACS2 (we have used version 2.1.1) https://github.com/taoliu/MACS
+7) MACS2 (we have used version 2.2.9.1; requires Python 3.7.12) https://github.com/taoliu/MACS
 
 8) HOMER (we recommend using the latest version) http://homer.ucsd.edu/homer/
 
