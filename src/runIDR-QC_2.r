@@ -61,12 +61,20 @@ cat(sprintf("\n\n Analysing cross-correlation and fragment length\n"))
 # it can be removed later
 system(paste0(RPackageExec, " ", sppexec, " -rf -s=-100:5:600 -c=", combined_filename, " -savp -out=", tab_filename))
 
+# kyra - check for negative RSC value and re-run spp with default strand shifts if so
+tab_results <- read.table(tab_filename, sep = "\t")
+RSC <- tab_results[1,10]
+if (RSC < 0) {
+	# remove old files
+	pdf_filename <- paste0(OutDir, 'chipSampleMaster.tagAlign.pdf')
+	system(paste("rm", tab_filename))
+	system(paste("rm", pdf_filename))
+	# re-run spp with default strand shift values
+	system(paste0(RPackageExec, " ", sppexec, " -rf -c=", combined_filename, " -savp -out=", tab_filename))
+}
+
 # remove the temporary files
 for (i in (4:length(args))) {
 	filename <- paste0(OutDir, "chipSampleRep", (i-3), ".tagAlign.gz")
 	system(paste("rm", filename))
 }
-
-
-
-
