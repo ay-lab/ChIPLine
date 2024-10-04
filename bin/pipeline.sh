@@ -756,10 +756,10 @@ if [ $DEBUG_TXT == 1 ]; then
 	# modified by kyra; forward/reverse strands represented as distinct lines in temp_NRF_PBC_file
 	# therefore, must divide uniqgenomepos by two for paired-end read fastq file input
 	if [ -z "$FASTQ2" ]; then
-		echo "single-end read fastq file is provided as input, divide uniqgenomepos by 2"
+		echo "single-end read fastq file is provided as input, no modification needed"
 		uniqgenomepos=`cat $temp_NRF_PBC_file | wc -l`
 	else 
-		echo "paired-end read fastq file is provided as input, no modification needed"
+		echo "paired-end read fastq file is provided as input, divide uniqgenomepos by 2"
 		uniqgenomepos=$(( $(cat $temp_NRF_PBC_file | wc -l) / 2 ))
 	fi
 
@@ -772,7 +772,13 @@ if [ $DEBUG_TXT == 1 ]; then
 
 	# number of genomic locations where exactly one read maps uniquely
 	echo "# number of genomic locations where exactly one read maps uniquely"
-	M1=`awk '$4==1' $temp_NRF_PBC_file | wc -l`
+	if [ -z "$FASTQ2" ]; then
+		echo "single-end read fastq file is provided as input, no modification needed"
+		M1=`awk '$4==1' $temp_NRF_PBC_file | wc -l`
+	else 
+		echo "paired-end read fastq file is provided as input, divide M1 by 2"
+		M1=$(( $(awk '$4==1' $temp_NRF_PBC_file | wc -l) / 2 ))
+	fi
 
 	# PCR Bottlenecking Coefficient 1 (PBC1) is computed by considering the 
 	# number of genomic locations where exactly one read maps uniquely
@@ -782,7 +788,13 @@ if [ $DEBUG_TXT == 1 ]; then
 
 	# number of genomic locations where exactly two reads map uniquely
 	echo "# number of genomic locations where exactly two reads map uniquely"
-	M2=`awk '$4==2' $temp_NRF_PBC_file | wc -l`
+	if [ -z "$FASTQ2" ]; then
+		echo "single-end read fastq file is provided as input, no modification needed"
+		M2=`awk '$4==2' $temp_NRF_PBC_file | wc -l`
+	else 
+		echo "paired-end read fastq file is provided as input, divide M2 by 2"
+		M2=$(( $(awk '$4==2' $temp_NRF_PBC_file | wc -l) / 2 ))
+	fi
 
 	# PCR Bottlenecking Coefficient 2 (PBC2)
 	# ratio of the following quantities
@@ -1120,12 +1132,14 @@ if [ $DEBUG_TXT == 1 ]; then
 	if [[ ! -f $FRiP_outfile || $Overwrite == 1 ]]; then
 		# number of reads within MACS2 narrow peaks (q threshold = 0.05)
 		echo "# number of reads within MACS2 narrow peaks (q threshold = 0.05)"
-		macs2_nreads_narrowpeak=`samtools view -cL $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam'`
+		#macs2_nreads_narrowpeak=`samtools view -cL $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam'`
+		macs2_nreads_narrowpeak=`samtools view -L $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam' | cut -f1 | sort -k1,1 | uniq | wc -l` # edited by Kyra, account for paired-end
 		FRiP_narrowpeak=`bc <<< "scale=3; ($macs2_nreads_narrowpeak * 1.0) / $uniq_mapped_read"`
 
 		# number of reads within MACS2 broad peaks (q threshold = 0.05)
 		echo "# number of reads within MACS2 broad peaks (q threshold = 0.05)"
-		macs2_nreads_broadpeak=`samtools view -cL $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam'`
+		#macs2_nreads_broadpeak=`samtools view -cL $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam'`
+		macs2_nreads_broadpeak=`samtools view -L $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam' | cut -f1 | sort -k1,1 | uniq | wc -l` # edited by Kyra, account for paired-end
 		FRiP_broadpeak=`bc <<< "scale=3; ($macs2_nreads_broadpeak * 1.0) / $uniq_mapped_read"`
 
 		echo -e 'UniqMappedRead\tMappedReadNarrowpeak\tFRiPNarrowPeak\tMappedReadBroadpeak\tFRiPBroadPeak' > $FRiP_outfile
@@ -1362,12 +1376,16 @@ if [ $DEBUG_TXT == 1 ]; then
 	if [[ ! -f $FRiP_outfile || $Overwrite == 1 ]]; then
 		# number of reads within MACS2 narrow peaks (q threshold = 0.05)
 		echo "# number of reads within MACS2 narrow peaks (q threshold = 0.05)"
-		macs2_nreads_narrowpeak=`samtools view -cL $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam'`
+		#macs2_nreads_narrowpeak=`samtools view -cL $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam'`
+		macs2_nreads_narrowpeak=`samtools view -L $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam' | cut -f1 | sort -k1,1 | uniq | wc -l` # edited by Kyra, account for paired-end
+		
 		FRiP_narrowpeak=`bc <<< "scale=3; ($macs2_nreads_narrowpeak * 1.0) / $uniq_mapped_read"`
 
 		# number of reads within MACS2 broad peaks (q threshold = 0.05)
 		echo "# number of reads within MACS2 broad peaks (q threshold = 0.05)"
-		macs2_nreads_broadpeak=`samtools view -cL $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam'`
+		#macs2_nreads_broadpeak=`samtools view -cL $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam'`
+		macs2_nreads_broadpeak=`samtools view -L $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam' | cut -f1 | sort -k1,1 | uniq | wc -l` # edited by Kyra, account for paired-end
+
 		FRiP_broadpeak=`bc <<< "scale=3; ($macs2_nreads_broadpeak * 1.0) / $uniq_mapped_read"`
 
 		echo -e 'UniqMappedRead\tMappedReadNarrowpeak\tFRiPNarrowPeak\tMappedReadBroadpeak\tFRiPBroadPeak' > $FRiP_outfile
@@ -1671,12 +1689,14 @@ if [[ 0 == 1 ]]; then
 		if [[ ! -f $FRiP_outfile || $Overwrite == 1 ]]; then
 			# number of reads within MACS2 narrow peaks (q threshold = 0.05)
 			echo "# number of reads within MACS2 narrow peaks (q threshold = 0.05)"
-			macs2_nreads_narrowpeak=`samtools view -cL $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam'`
+			#macs2_nreads_narrowpeak=`samtools view -cL $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam'`
+			macs2_nreads_narrowpeak=`samtools view -L $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam' | cut -f1 | sort -k1,1 | uniq | wc -l` # edited by Kyra, account for paired-end
 			FRiP_narrowpeak=`bc <<< "scale=3; ($macs2_nreads_narrowpeak * 1.0) / $uniq_mapped_read"`
 
 			# number of reads within MACS2 broad peaks (q threshold = 0.05)
 			echo "# number of reads within MACS2 broad peaks (q threshold = 0.05)"
-			macs2_nreads_broadpeak=`samtools view -cL $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam'`
+			#macs2_nreads_broadpeak=`samtools view -cL $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam'`
+			macs2_nreads_broadpeak=`samtools view -L $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam' | cut -f1 | sort -k1,1 | uniq | wc -l` # edited by Kyra, account for paired-end
 			FRiP_broadpeak=`bc <<< "scale=3; ($macs2_nreads_broadpeak * 1.0) / $uniq_mapped_read"`
 
 			echo -e 'UniqMappedRead\tMappedReadNarrowpeak\tFRiPNarrowPeak\tMappedReadBroadpeak\tFRiPBroadPeak' > $FRiP_outfile
@@ -1929,12 +1949,14 @@ if [[ 0 == 1 ]]; then
 		if [[ ! -f $FRiP_outfile || $Overwrite == 1 ]]; then
 			# number of reads within MACS2 narrow peaks (q threshold = 0.05)
 			echo "# number of reads within MACS2 narrow peaks (q threshold = 0.05)"
-			macs2_nreads_narrowpeak=`samtools view -cL $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam'`
+			#macs2_nreads_narrowpeak=`samtools view -cL $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam'`
+			macs2_nreads_narrowpeak=`samtools view -L $QFilt1File $bowtie2_BAM_prefix'.rmdup.bam' | cut -f1 | sort -k1,1 | uniq | wc -l` # edited by Kyra, account for paired-end
 			FRiP_narrowpeak=`bc <<< "scale=3; ($macs2_nreads_narrowpeak * 1.0) / $uniq_mapped_read"`
 
 			# number of reads within MACS2 broad peaks (q threshold = 0.05)
 			echo "# number of reads within MACS2 broad peaks (q threshold = 0.05)"
-			macs2_nreads_broadpeak=`samtools view -cL $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam'`
+			#macs2_nreads_broadpeak=`samtools view -cL $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam'`
+			macs2_nreads_broadpeak=`samtools view -L $QFilt1FileBroad $bowtie2_BAM_prefix'.rmdup.bam' | cut -f1 | sort -k1,1 | uniq | wc -l` # edited by Kyra, account for paired-end
 			FRiP_broadpeak=`bc <<< "scale=3; ($macs2_nreads_broadpeak * 1.0) / $uniq_mapped_read"`
 
 			echo -e 'UniqMappedRead\tMappedReadNarrowpeak\tFRiPNarrowPeak\tMappedReadBroadpeak\tFRiPBroadPeak' > $FRiP_outfile
